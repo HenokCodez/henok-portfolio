@@ -1,0 +1,128 @@
+@tailwind base;
+
+:root {
+  --bg: #0A0A0B;
+  --surface: #111113;
+  --surface-2: #18181B;
+  --surface-3: #212125;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --text: #F2F0EB;
+  --muted: #8C8A85;
+  --faint: #55534F;
+  --accent: #FF4D1F;
+  --accent-soft: rgba(255, 77, 31, 0.14);
+  --on-accent: #120400;
+  --ok: #3DDC97;
+  --danger: #FF5A5F;
+
+  --pad: 40px;
+  --max: 1360px;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --header-h: 76px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 700px) {
+  :root { --pad: 20px; --header-h: 64px; }
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Film grain + vignette overlay for thumbnails. Add class "grain" to a relatively-positioned wrapper. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(0,0,0,.55) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.09'/></svg>");
+}
+
+/* Headline helpers */
+.display {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: .9;
+  text-transform: uppercase;
+}
+
+.serif-accent {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--accent);
+  font-size: 1.03em;
+}
+
+.label-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(61,220,151,.45); }
+  50% { box-shadow: 0 0 0 6px rgba(61,220,151,0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@tailwind components;
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-site px-5 md:px-10;
+  }
+  .py-section {
+    @apply py-24 md:py-40;
+  }
+}
+
+@tailwind utilities;

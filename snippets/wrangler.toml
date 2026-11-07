@@ -1,0 +1,11 @@
+# workers/keepalive/wrangler.toml
+name = "henok-supabase-keepalive"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+[triggers]
+crons = ["0 6 */3 * *"]   # 06:00 UTC every 3rd day
+
+# Set secrets (don't put keys in this file):
+#   npx wrangler secret put SUPABASE_URL
+#   npx wrangler secret put SUPABASE_ANON_KEY

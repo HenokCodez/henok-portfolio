@@ -1,0 +1,182 @@
+[
+  {
+    "id": "sample-1",
+    "slug": "the-last-harvest",
+    "title": "The Last Harvest",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "aqz-KE-bpKQ",
+    "category": "Documentary",
+    "client": "Independent",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2025,
+    "thumbnail_url": null,
+    "featured": true,
+    "published": true,
+    "display_order": 1,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-2",
+    "slug": "1m-subscribers-story",
+    "title": "1M Subscribers Story",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "eRsGyueVLvQ",
+    "category": "YouTube",
+    "client": "Creator Channel",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2025,
+    "thumbnail_url": null,
+    "featured": true,
+    "published": true,
+    "display_order": 2,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-3",
+    "slug": "urban-sneaker-launch",
+    "title": "Urban Sneaker Launch",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "R6MlUcmOul8",
+    "category": "Commercials",
+    "client": "Streetwear Brand",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2025,
+    "thumbnail_url": null,
+    "featured": true,
+    "published": true,
+    "display_order": 3,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-4",
+    "slug": "the-coffee-ritual",
+    "title": "The Coffee Ritual",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "YE7VzlLtp-4",
+    "category": "Documentary",
+    "client": "Independent",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2024,
+    "thumbnail_url": null,
+    "featured": true,
+    "published": true,
+    "display_order": 4,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-5",
+    "slug": "60-second-recap",
+    "title": "60-Second Recap",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "aqz-KE-bpKQ",
+    "category": "Shorts",
+    "client": "Media House",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2025,
+    "thumbnail_url": null,
+    "featured": true,
+    "published": true,
+    "display_order": 5,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-6",
+    "slug": "tech-review-reimagined",
+    "title": "Tech Review Reimagined",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "eRsGyueVLvQ",
+    "category": "YouTube",
+    "client": "Tech Channel",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2024,
+    "thumbnail_url": null,
+    "featured": false,
+    "published": true,
+    "display_order": 6,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-7",
+    "slug": "skyline-hotel-promo",
+    "title": "Skyline Hotel Promo",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "R6MlUcmOul8",
+    "category": "Commercials",
+    "client": "Hospitality",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2024,
+    "thumbnail_url": null,
+    "featured": false,
+    "published": true,
+    "display_order": 7,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-8",
+    "slug": "behind-the-reel",
+    "title": "Behind The Reel",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "YE7VzlLtp-4",
+    "category": "Shorts",
+    "client": "Personal",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2025,
+    "thumbnail_url": null,
+    "featured": false,
+    "published": true,
+    "display_order": 8,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sample-9",
+    "slug": "voices-of-the-city",
+    "title": "Voices Of The City",
+    "description": "Sample description \u2014 replace with the story behind this project: the brief, your role and the result.",
+    "youtube_id": "aqz-KE-bpKQ",
+    "category": "Documentary",
+    "client": "NGO",
+    "role": "Editor",
+    "tools": [
+      "Premiere Pro",
+      "DaVinci Resolve"
+    ],
+    "year": 2024,
+    "thumbnail_url": null,
+    "featured": false,
+    "published": true,
+    "display_order": 9,
+    "created_at": "2026-01-01T00:00:00Z"
+  }
+]

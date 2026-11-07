@@ -1,0 +1,109 @@
+{
+  "_note": "EDIT every value marked (EDIT) in docs/10-content-and-copy.md. Mockups show placeholders.",
+  "name": "Henok",
+  "role": "Video Editor",
+  "roleLong": "Video Editor & Visual Storyteller",
+  "email": "hello@henok.studio",
+  "bookingUrl": "",
+  "cvUrl": "",
+  "location": {
+    "label": "Ethiopia",
+    "clockCity": "Addis",
+    "timeZone": "Africa/Addis_Ababa",
+    "gmt": "GMT+3"
+  },
+  "socials": {
+    "youtube": "",
+    "instagram": "",
+    "linkedin": "",
+    "telegram": ""
+  },
+  "available": true,
+  "showreel": {
+    "youtubeId": "aqz-KE-bpKQ",
+    "duration": "01:48"
+  },
+  "tools": [
+    "Premiere Pro",
+    "After Effects",
+    "DaVinci Resolve",
+    "Photoshop",
+    "Audition",
+    "Figma",
+    "CapCut",
+    "Blender"
+  ],
+  "services": [
+    {
+      "title": "Short-form edits",
+      "text": "Reels, Shorts and TikToks cut for retention — hooks, pacing, captions that pop."
+    },
+    {
+      "title": "Long-form YouTube",
+      "text": "Story structure, sound and rhythm for videos people actually finish."
+    },
+    {
+      "title": "Commercials & ads",
+      "text": "Tight, brand-safe edits that sell without feeling like an ad."
+    },
+    {
+      "title": "Motion & colour",
+      "text": "Titles, lower-thirds, grading and finishing that give footage a look."
+    }
+  ],
+  "stats": [
+    {
+      "value": 5,
+      "suffix": "+",
+      "label": "Years editing"
+    },
+    {
+      "value": 120,
+      "suffix": "+",
+      "label": "Projects delivered"
+    },
+    {
+      "value": 40,
+      "suffix": "+",
+      "label": "Happy clients"
+    }
+  ],
+  "experience": [
+    {
+      "years": "2024 — Now",
+      "role": "Freelance Video Editor",
+      "place": "Creators, brands & filmmakers"
+    },
+    {
+      "years": "2022 — 2024",
+      "role": "Video Editor",
+      "place": "Production studio"
+    },
+    {
+      "years": "2021 — 2022",
+      "role": "Junior Editor / Assistant",
+      "place": "Media house"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Henok took raw footage and gave it a pulse. Turnaround was fast and the edit felt effortless.",
+      "name": "Client Name",
+      "role": "Role, Company"
+    }
+  ],
+  "projectTypes": [
+    "YouTube edit",
+    "Short-form",
+    "Commercial",
+    "Documentary",
+    "Motion graphics",
+    "Other"
+  ],
+  "budgets": [
+    "< $500",
+    "$500–1.5k",
+    "$1.5k–5k",
+    "$5k+"
+  ]
+}
