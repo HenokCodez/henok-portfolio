@@ -18,15 +18,15 @@ export function usePortraitLook(): PortraitLookValues {
   const y = useMotionValue(0); // -1 … 1 (top … bottom)
 
   // Responsive spring with high stiffness for instant tracking and smooth damping
-  const cfg = { stiffness: 220, damping: 24, mass: 0.25 };
+  const cfg = { stiffness: 260, damping: 26, mass: 0.2 };
   const sx = useSpring(x, cfg);
   const sy = useSpring(y, cfg);
 
   // 3D Head rotation (yaw & pitch in degrees) - clearly noticeable 3D turning
-  const headRotateY = useTransform(sx, (v) => v * 16); // turns left/right ±16 deg
-  const headRotateX = useTransform(sy, (v) => -v * 10); // tilts up/down ±10 deg
-  const headX = useTransform(sx, (v) => v * 16);
-  const headY = useTransform(sy, (v) => v * 10);
+  const headRotateY = useTransform(sx, (v) => v * 18); // turns left/right ±18 deg
+  const headRotateX = useTransform(sy, (v) => -v * 12); // tilts up/down ±12 deg
+  const headX = useTransform(sx, (v) => v * 18);
+  const headY = useTransform(sy, (v) => v * 12);
 
   // Body stays grounded with subtle parallax
   const bodyX = useTransform(sx, (v) => v * 5);

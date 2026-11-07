@@ -14,7 +14,7 @@ export function HeroPortrait({ look }: HeroPortraitProps) {
       {!imageError ? (
         <div
           className="relative w-full h-full overflow-visible"
-          style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+          style={{ perspective: 1000, transformStyle: 'preserve-3d' }}
         >
           {/* Layer 1: Body (Chest, Shoulders & T-shirt) - Anchored with subtle parallax */}
           <motion.div
@@ -36,7 +36,7 @@ export function HeroPortrait({ look }: HeroPortraitProps) {
               y: look.headY,
               rotateY: look.headRotateY,
               rotateX: look.headRotateX,
-              transformOrigin: '50% 75%',
+              transformOrigin: '50% 58%',
               transformStyle: 'preserve-3d',
             }}
             className="absolute inset-0 z-[2] will-change-transform"
