@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { siteConfig } from '../../config/site';
@@ -17,16 +17,44 @@ const NAV_LINKS = [
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const location = useLocation();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Close on ESC key
+  // Close on ESC key & Focus Trap
   useEffect(() => {
+    if (!isOpen) return;
+
+    // Focus close button on open
+    const timer = setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 50);
+
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
+      } else if (e.key === 'Tab' && menuRef.current) {
+        const focusable = menuRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     }
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   // Lock body scroll when open
@@ -51,6 +79,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={menuRef}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
@@ -72,6 +101,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </Link>
 
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={onClose}
               aria-label="Close menu"
@@ -128,7 +158,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </a>
 
               <div className="flex items-center gap-2">
-                <span className="inline-block h-2 w-2 rounded-full bg-ok shadow-[0_0_8px_#3DDC97]" />
+                <span className="inline-block h-2 w-2 rounded-full bg-ok shadow-[0_0_8px_currentColor] text-ok" />
                 <span className="font-mono text-xs text-muted">
                   {siteConfig.available ? 'Available for projects' : 'Booked'}
                 </span>

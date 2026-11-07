@@ -19,6 +19,8 @@ export function ViewToggle({ mode, onChange, className }: ViewToggleProps) {
       <button
         type="button"
         onClick={() => onChange('grid')}
+        aria-pressed={mode === 'grid'}
+        aria-label="Grid view"
         className={cn(
           'transition-colors py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
           mode === 'grid'
@@ -34,6 +36,8 @@ export function ViewToggle({ mode, onChange, className }: ViewToggleProps) {
       <button
         type="button"
         onClick={() => onChange('list')}
+        aria-pressed={mode === 'list'}
+        aria-label="List view"
         className={cn(
           'transition-colors py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
           mode === 'list'

@@ -28,9 +28,9 @@ export function Footer() {
 
           {/* Column 2: Pages */}
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted mb-4">
+            <p className="font-mono text-[11px] uppercase tracking-mono text-muted mb-4">
               Pages
-            </h4>
+            </p>
             <ul className="space-y-2.5 text-[15px]">
               <li>
                 <Link to="/work" className="text-text hover:text-accent transition-colors">
@@ -52,9 +52,9 @@ export function Footer() {
 
           {/* Column 3: Social */}
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted mb-4">
+            <p className="font-mono text-[11px] uppercase tracking-mono text-muted mb-4">
               Social
-            </h4>
+            </p>
             <ul className="space-y-2.5 text-[15px]">
               {siteConfig.socials.youtube && (
                 <li>
@@ -97,12 +97,12 @@ export function Footer() {
 
           {/* Column 4: Status */}
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted mb-4">
+            <p className="font-mono text-[11px] uppercase tracking-mono text-muted mb-4">
               Status
-            </h4>
+            </p>
             <ul className="space-y-2.5 text-[15px]">
               <li className="flex items-center gap-2 text-text">
-                <span className="inline-block h-2 w-2 rounded-full bg-ok shadow-[0_0_8px_#3DDC97]" />
+                <span className="inline-block h-2 w-2 rounded-full bg-ok shadow-[0_0_8px_currentColor] text-ok" />
                 <span>Available for projects</span>
               </li>
               <li className="text-muted text-sm">Reply within 24h</li>

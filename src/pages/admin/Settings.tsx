@@ -84,6 +84,7 @@ export default function Settings() {
               </div>
               <Switch
                 checked={settings.available}
+                aria-label="Toggle availability for projects"
                 onChange={(checked) =>
                   setSettings({ ...settings, available: checked })
                 }

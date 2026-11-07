@@ -30,7 +30,7 @@ export default function Contact() {
       </section>
 
       {/* Main Content Area */}
-      <section className="py-12 md:py-24 bg-bg">
+      <section className="pt-10 pb-24 md:pb-40 bg-bg">
         <div className="container-x">
           <div className="grid grid-cols-1 md:grid-cols-[7fr_5fr] gap-12 md:gap-20 items-start">
             {/* Form (Left on Desktop, First on Mobile) */}

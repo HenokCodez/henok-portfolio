@@ -57,7 +57,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // In fallback mode, accept any non-empty credentials
       if (email.trim() && pass.trim()) {
         setIsDemoAuth(true);
-        localStorage.setItem('henok_admin_auth', 'true');
+        try {
+          localStorage.setItem('henok_admin_auth', 'true');
+        } catch {
+          // ignore
+        }
         return {};
       }
       return { error: 'Invalid email or password.' };

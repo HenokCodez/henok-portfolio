@@ -35,6 +35,11 @@ export function VideoModal({
     setThumbFallback(false);
   }, [activeSlug]);
 
+  const handleClose = () => {
+    setIsPlaying(false);
+    onClose();
+  };
+
   const go = (delta: number) => {
     if (!videos.length || index < 0) return;
     const nextIndex = (index + delta + videos.length) % videos.length;
@@ -63,9 +68,14 @@ export function VideoModal({
   useEffect(() => {
     if (!video) return;
 
+    const handleClose = () => {
+      setIsPlaying(false);
+      onClose();
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        handleClose();
       } else if (e.key === 'ArrowRight') {
         go(1);
       } else if (e.key === 'ArrowLeft') {
@@ -90,7 +100,7 @@ export function VideoModal({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  });
+  }, [video, videos, index, onClose, onNavigate]);
 
   // Calculate next 3 videos for "More work"
   const moreWork = video
@@ -106,7 +116,7 @@ export function VideoModal({
           {/* [1] Scrim with Backdrop Blur */}
           <motion.div
             key="scrim"
-            onClick={onClose}
+            onClick={handleClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -135,7 +145,7 @@ export function VideoModal({
               <button
                 ref={closeButtonRef}
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Close video"
                 className="h-9 px-4 rounded-full border border-line-strong text-[13px] font-semibold text-text hover:bg-surface-2 hover:border-line-strong transition-colors"
               >
@@ -271,9 +281,9 @@ export function VideoModal({
             {/* [8] More Work */}
             {!isShowreel && moreWork.length > 0 && (
               <div className="mt-9 select-none">
-                <p className="font-mono text-[11px] uppercase tracking-mono text-muted mb-3.5">
+                <h3 className="font-mono text-[11px] uppercase tracking-mono text-muted mb-3.5">
                   More work
-                </p>
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {moreWork.map((other) => (
                     <div
@@ -281,7 +291,12 @@ export function VideoModal({
                       onClick={() => onNavigate(other.slug)}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => e.key === 'Enter' && onNavigate(other.slug)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onNavigate(other.slug);
+                        }
+                      }}
                       className="group p-2.5 sm:p-3.5 rounded-[14px] bg-surface border border-line hover:border-line-strong flex items-center gap-3.5 cursor-pointer transition-colors"
                     >
                       <div className="w-[104px] aspect-video rounded-lg overflow-hidden shrink-0 relative bg-surface-2">

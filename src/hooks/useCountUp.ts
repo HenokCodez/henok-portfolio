@@ -14,6 +14,7 @@ export function useCountUp(target: number, durationSec: number = 1.6) {
     const start = performance.now();
     const duration = durationSec * 1000;
 
+    let rafId: number;
     function step(now: number) {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
@@ -21,11 +22,12 @@ export function useCountUp(target: number, durationSec: number = 1.6) {
       setCount(Math.round(ease * target));
 
       if (progress < 1) {
-        requestAnimationFrame(step);
+        rafId = requestAnimationFrame(step);
       }
     }
 
-    requestAnimationFrame(step);
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
   }, [inView, target, durationSec]);
 
   return { count, ref };

@@ -7,16 +7,25 @@ export default function NotFound() {
 
   useEffect(() => {
     let meta = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    const wasCreated = !meta;
     if (!meta) {
       meta = document.createElement('meta');
       meta.name = 'robots';
       document.head.appendChild(meta);
     }
     meta.content = 'noindex';
+
+    return () => {
+      if (wasCreated) {
+        meta?.remove();
+      } else {
+        meta?.removeAttribute('content');
+      }
+    };
   }, []);
 
   return (
-    <div className="relative min-h-[calc(100vh-var(--header-h))] flex flex-col items-center justify-center text-center p-6 select-none overflow-hidden">
+    <div className="relative min-h-[calc(100svh-var(--header-h))] flex flex-col items-center justify-center text-center p-6 select-none overflow-hidden">
       {/* Background Radial Glow */}
       <div
         aria-hidden="true"

@@ -31,7 +31,11 @@ export function AdminLayout() {
     }
     checkUnread();
     const interval = setInterval(checkUnread, 15000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      const m = document.querySelector('meta[name="robots"]');
+      if (m) m.remove();
+    };
   }, []);
 
   async function handleSignOut() {

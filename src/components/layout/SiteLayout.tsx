@@ -17,7 +17,7 @@ export function SiteLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-bg text-text selection:bg-accent selection:text-accent-ink">
       <Header />
-      <main className="flex-1 pt-[var(--header-h)]">
+      <main className="flex-1">
         <Outlet />
       </main>
       {isKnownRoute && <Footer />}

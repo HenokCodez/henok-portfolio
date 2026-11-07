@@ -24,6 +24,10 @@ export default function Login() {
       document.head.appendChild(meta);
     }
     meta.content = 'noindex';
+    return () => {
+      const m = document.querySelector('meta[name="robots"]');
+      if (m) m.remove();
+    };
   }, []);
 
   useEffect(() => {
@@ -54,7 +58,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-[100svh] bg-bg flex items-center justify-center p-5 select-none overflow-hidden">
+    <main className="relative min-h-[100svh] bg-bg flex items-center justify-center p-5 select-none overflow-hidden">
       {/* Background Accent Glow */}
       <div
         aria-hidden="true"
@@ -173,6 +177,6 @@ export default function Login() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

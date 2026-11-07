@@ -111,7 +111,8 @@ export default function Work() {
       </section>
 
       {/* Main Work Area */}
-      <section className="py-12 md:py-20 min-h-[450px]">
+      <section className="py-12 md:py-20 min-h-[450px]" aria-label="Project Gallery">
+        <h2 className="sr-only">Project Gallery</h2>
         <div className="container-x">
           {error && (
             <div className="text-center py-20 space-y-4">

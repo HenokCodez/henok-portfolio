@@ -1,68 +1,87 @@
 import { useEffect } from 'react';
-import { useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { useMotionValue, useSpring, useTransform, MotionValue } from 'framer-motion';
 
-export function usePortraitLook() {
-  const reduce = useReducedMotion();
+export interface PortraitLookValues {
+  headRotateY: MotionValue<number>;
+  headRotateX: MotionValue<number>;
+  headX: MotionValue<number>;
+  headY: MotionValue<number>;
+  bodyX: MotionValue<number>;
+  glowX: MotionValue<number>;
+  glowY: MotionValue<number>;
+  eyeX: MotionValue<number>;
+  eyeY: MotionValue<number>;
+}
+
+export function usePortraitLook(): PortraitLookValues {
   const x = useMotionValue(0); // -1 … 1 (left … right)
   const y = useMotionValue(0); // -1 … 1 (top … bottom)
-  
-  // Spring configuration: smooth, organic, responsive tracking
-  const cfg = { stiffness: 140, damping: 20, mass: 0.35 };
+
+  // Responsive spring with high stiffness for instant tracking and smooth damping
+  const cfg = { stiffness: 220, damping: 24, mass: 0.25 };
   const sx = useSpring(x, cfg);
   const sy = useSpring(y, cfg);
 
-  // 3D Head rotation (yaw & pitch)
-  const headRotateY = useTransform(sx, (v) => v * 14); // turns left/right ±14 deg
-  const headRotateX = useTransform(sy, (v) => -v * 8);  // tilts up/down ±8 deg
-  const headX = useTransform(sx, (v) => v * 12);
-  const headY = useTransform(sy, (v) => v * 8);
-  
-  // Body stays anchored with subtle parallax
-  const bodyX = useTransform(sx, (v) => v * 4);
-  
-  // Ambient radial glow moves in opposite direction
-  const glowX = useTransform(sx, (v) => v * -24);
-  const glowY = useTransform(sy, (v) => v * -16);
-  
-  // Eye pupils track cursor independently
-  const eyeX = useTransform(sx, (v) => v * 7); // shifts pupils ±7px
-  const eyeY = useTransform(sy, (v) => v * 4.5); // shifts pupils ±4.5px
+  // 3D Head rotation (yaw & pitch in degrees) - clearly noticeable 3D turning
+  const headRotateY = useTransform(sx, (v) => v * 16); // turns left/right ±16 deg
+  const headRotateX = useTransform(sy, (v) => -v * 10); // tilts up/down ±10 deg
+  const headX = useTransform(sx, (v) => v * 16);
+  const headY = useTransform(sy, (v) => v * 10);
+
+  // Body stays grounded with subtle parallax
+  const bodyX = useTransform(sx, (v) => v * 5);
+
+  // Background glow moves in opposite direction
+  const glowX = useTransform(sx, (v) => v * -32);
+  const glowY = useTransform(sy, (v) => v * -20);
+
+  // Eye pupils track cursor across the eye opening (±8px X, ±5px Y)
+  const eyeX = useTransform(sx, (v) => v * 8);
+  const eyeY = useTransform(sy, (v) => v * 5);
 
   useEffect(() => {
-    if (reduce) return;
-    const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-    if (!hasMouse) {
-      // touch devices: gentle organic sway, 6s loop
-      let raf = 0;
-      const t0 = performance.now();
-      const loop = (t: number) => {
-        x.set(Math.sin(((t - t0) / 6000) * Math.PI * 2) * 0.5);
-        raf = requestAnimationFrame(loop);
-      };
-      raf = requestAnimationFrame(loop);
-      return () => cancelAnimationFrame(raf);
-    }
-
-    const onMove = (e: PointerEvent) => {
-      // Normalize mouse to -1..1 across the viewport
-      x.set((e.clientX / window.innerWidth) * 2 - 1);
-      y.set((e.clientY / window.innerHeight) * 2 - 1);
+    const handleCoord = (clientX: number, clientY: number) => {
+      // Normalize to -1..1 relative to the browser viewport
+      const nx = (clientX / window.innerWidth) * 2 - 1;
+      const ny = (clientY / window.innerHeight) * 2 - 1;
+      x.set(Math.max(-1, Math.min(1, nx)));
+      y.set(Math.max(-1, Math.min(1, ny)));
     };
-    
+
+    const onPointerMove = (e: PointerEvent) => {
+      handleCoord(e.clientX, e.clientY);
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      handleCoord(e.clientX, e.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches[0]) {
+        handleCoord(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
     const onLeave = () => {
       x.set(0);
       y.set(0);
     };
 
-    window.addEventListener('pointermove', onMove, { passive: true });
-    document.documentElement.addEventListener('pointerleave', onLeave);
-    
+    // Attach listeners unconditionally so it works on mouse, trackpad, pen and touch
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('pointerleave', onLeave);
+
     return () => {
-      window.removeEventListener('pointermove', onMove);
-      document.documentElement.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('pointerleave', onLeave);
     };
-  }, [reduce, x, y]);
+  }, [x, y]);
 
   return { headRotateY, headRotateX, headX, headY, bodyX, glowX, glowY, eyeX, eyeY };
 }

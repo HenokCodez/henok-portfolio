@@ -36,9 +36,9 @@ export function Testimonials() {
                     {t.name.slice(0, 2).toUpperCase()}
                   </div>
                   <div>
-                    <h4 className="font-display font-semibold text-sm text-text leading-tight">
+                    <p className="font-display font-semibold text-sm text-text leading-tight">
                       {t.name}
-                    </h4>
+                    </p>
                     <p className="font-mono text-xs text-muted leading-tight mt-0.5">
                       {t.role}
                     </p>

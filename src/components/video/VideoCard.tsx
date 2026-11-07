@@ -34,7 +34,7 @@ export function VideoCard({
       whileHover={prefersReduced ? undefined : { scale: 1.015 }}
       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        'group relative w-full rounded-card overflow-hidden bg-surface-2 border border-line cursor-pointer select-none transition-[box-shadow,border-color] duration-300 hover:border-accent hover:shadow-[0_0_0_1.5px_#FF4D1F,0_30px_60px_-20px_rgba(255,77,31,0.35)]',
+        'group relative w-full rounded-card overflow-hidden bg-surface-2 border border-line cursor-pointer select-none transition-[box-shadow,border-color] duration-300 hover:border-accent hover:shadow-[0_0_0_1.5px_var(--accent),0_30px_60px_-20px_var(--accent-glow)]',
         aspectClassName || 'aspect-video',
         className,
       )}

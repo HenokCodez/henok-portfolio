@@ -22,20 +22,20 @@ export function Marquee({ items, className, speedSec = 40 }: MarqueeProps) {
         <div className="flex shrink-0 items-center gap-8">
           {items.map((item, idx) => (
             <React.Fragment key={`orig-${idx}`}>
-              <span className="font-display text-sm md:text-base font-bold uppercase tracking-wider text-muted">
+              <span className="font-display text-[18px] md:text-[26px] font-extrabold uppercase tracking-tight text-faint">
                 {item}
               </span>
-              <span className="text-accent text-xs">•</span>
+              <span className="text-accent text-sm md:text-base mx-6 select-none">✦</span>
             </React.Fragment>
           ))}
         </div>
         <div className="flex shrink-0 items-center gap-8" aria-hidden="true">
           {items.map((item, idx) => (
             <React.Fragment key={`dup-${idx}`}>
-              <span className="font-display text-sm md:text-base font-bold uppercase tracking-wider text-muted">
+              <span className="font-display text-[18px] md:text-[26px] font-extrabold uppercase tracking-tight text-faint">
                 {item}
               </span>
-              <span className="text-accent text-xs">•</span>
+              <span className="text-accent text-sm md:text-base mx-6 select-none">✦</span>
             </React.Fragment>
           ))}
         </div>
