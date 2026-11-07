@@ -1,25 +1,15 @@
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { siteConfig } from '../../config/site';
-import { HeroPortrait } from './HeroPortrait';
+import { HeroPortrait3D } from './HeroPortrait3D';
 import { HeroTimecode } from './HeroTimecode';
-import { usePortraitLook } from '../../hooks/usePortraitLook';
 
 export function Hero() {
-  const look = usePortraitLook();
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const parallaxY = useTransform(scrollY, [0, 900], [0, -108]);
 
   return (
     <section className="relative w-full h-[900px] overflow-hidden bg-bg select-none">
-      {/* Background Interactive Radial Glow */}
-      <motion.div
-        style={prefersReduced ? undefined : { x: look.glowX, y: look.glowY }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(60%_55%_at_50%_62%,rgba(255,77,31,0.20),transparent_70%)]" />
-      </motion.div>
-
       {/* [3] Intro Line */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -48,19 +38,13 @@ export function Hero() {
             className="font-serif italic text-accent"
             style={{ fontSize: 'clamp(120px, 24vw, 360px)' }}
           >
-            stories
-          </span>
-          <span
-            className="font-display font-extrabold text-text"
-            style={{ fontSize: 'clamp(120px, 24vw, 360px)' }}
-          >
-            .
+            stories.
           </span>
         </h1>
       </motion.div>
 
-      {/* [5] Portrait */}
-      <HeroPortrait look={look} />
+      {/* [5] 3D Pose-Blend Portrait */}
+      <HeroPortrait3D />
 
       {/* [6] Side Blocks */}
       {/* Left Block */}

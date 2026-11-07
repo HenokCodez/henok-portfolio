@@ -1,7 +1,10 @@
+// src/hooks/usePortraitLook.ts — hero portrait follows the cursor (spec A3)
 import { useEffect } from 'react';
-import { useMotionValue, useSpring, useTransform, MotionValue } from 'framer-motion';
+import { useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from 'framer-motion';
 
 export interface PortraitLookValues {
+  sx: MotionValue<number>;
+  sy: MotionValue<number>;
   headRotateY: MotionValue<number>;
   headRotateX: MotionValue<number>;
   headX: MotionValue<number>;
@@ -14,74 +17,70 @@ export interface PortraitLookValues {
 }
 
 export function usePortraitLook(): PortraitLookValues {
+  const reduce = useReducedMotion();
   const x = useMotionValue(0); // -1 … 1 (left … right)
   const y = useMotionValue(0); // -1 … 1 (top … bottom)
-
-  // Responsive spring with high stiffness for instant tracking and smooth damping
-  const cfg = { stiffness: 260, damping: 26, mass: 0.2 };
+  const cfg = { stiffness: 140, damping: 20, mass: 0.35 };
   const sx = useSpring(x, cfg);
   const sy = useSpring(y, cfg);
 
-  // 3D Head rotation (yaw & pitch in degrees) - clearly noticeable 3D turning
-  const headRotateY = useTransform(sx, (v) => v * 18); // turns left/right ±18 deg
-  const headRotateX = useTransform(sy, (v) => -v * 12); // tilts up/down ±12 deg
-  const headX = useTransform(sx, (v) => v * 18);
-  const headY = useTransform(sy, (v) => v * 12);
-
-  // Body stays grounded with subtle parallax
-  const bodyX = useTransform(sx, (v) => v * 5);
-
-  // Background glow moves in opposite direction
-  const glowX = useTransform(sx, (v) => v * -32);
-  const glowY = useTransform(sy, (v) => v * -20);
-
-  // Eye pupils track cursor across the eye opening (±8px X, ±5px Y)
-  const eyeX = useTransform(sx, (v) => v * 8);
-  const eyeY = useTransform(sy, (v) => v * 5);
+  const headRotateY = useTransform(sx, (v) => v * 8);
+  const headRotateX = useTransform(sy, (v) => -v * 5);
+  const headX = useTransform(sx, (v) => v * 10);
+  const headY = useTransform(sy, (v) => v * 6);
+  const bodyX = useTransform(sx, (v) => v * 4);
+  const glowX = useTransform(sx, (v) => v * -24);
+  const glowY = useTransform(sy, (v) => v * -16);
+  const eyeX = useTransform(sx, (v) => v * 5);
+  const eyeY = useTransform(sy, (v) => v * 3);
 
   useEffect(() => {
-    const handleCoord = (clientX: number, clientY: number) => {
-      // Normalize to -1..1 relative to the browser viewport
-      const nx = (clientX / window.innerWidth) * 2 - 1;
-      const ny = (clientY / window.innerHeight) * 2 - 1;
-      x.set(Math.max(-1, Math.min(1, nx)));
-      y.set(Math.max(-1, Math.min(1, ny)));
-    };
+    if (reduce) return;
 
-    const onPointerMove = (e: PointerEvent) => {
-      handleCoord(e.clientX, e.clientY);
-    };
+    let hasInteractedWithMouse = false;
+    let raf = 0;
+    const t0 = performance.now();
 
-    const onMouseMove = (e: MouseEvent) => {
-      handleCoord(e.clientX, e.clientY);
+    // Touch / idle sway loop
+    const loop = (t: number) => {
+      if (!hasInteractedWithMouse) {
+        x.set(Math.sin(((t - t0) / 6000) * Math.PI * 2) * 0.4);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+        hasInteractedWithMouse = true;
+      }
+      x.set(Math.max(-1, Math.min(1, (e.clientX / window.innerWidth) * 2 - 1)));
+      y.set(Math.max(-1, Math.min(1, (e.clientY / window.innerHeight) * 2 - 1)));
     };
 
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches && e.touches[0]) {
-        handleCoord(e.touches[0].clientX, e.touches[0].clientY);
+        x.set(Math.max(-1, Math.min(1, (e.touches[0].clientX / window.innerWidth) * 2 - 1)));
+        y.set(Math.max(-1, Math.min(1, (e.touches[0].clientY / window.innerHeight) * 2 - 1)));
       }
     };
 
     const onLeave = () => {
-      x.set(0);
+      hasInteractedWithMouse = false;
       y.set(0);
     };
 
-    // Attach listeners unconditionally so it works on mouse, trackpad, pen and touch
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('touchmove', onTouchMove, { passive: true });
-    document.addEventListener('mouseleave', onLeave);
-    document.addEventListener('pointerleave', onLeave);
+    document.documentElement.addEventListener('pointerleave', onLeave);
 
     return () => {
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('mousemove', onMouseMove);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('pointermove', onMove);
       window.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('mouseleave', onLeave);
-      document.removeEventListener('pointerleave', onLeave);
+      document.documentElement.removeEventListener('pointerleave', onLeave);
     };
-  }, [x, y]);
+  }, [reduce, x, y]);
 
-  return { headRotateY, headRotateX, headX, headY, bodyX, glowX, glowY, eyeX, eyeY };
+  return { sx, sy, headRotateY, headRotateX, headX, headY, bodyX, glowX, glowY, eyeX, eyeY };
 }
