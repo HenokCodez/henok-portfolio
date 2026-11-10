@@ -41,14 +41,6 @@ Each phase has a **prompt** Henok can paste. Phases are small on purpose.
 - [x] Scroll reveals per `docs/06-animation-spec.md`
 - [x] Mobile matches `design/mockups/mobile/home.png`
 
-## Phase 4b — Hero portrait 3D pose-blend
-- [x] Pose-blend 3D portrait using `HeroPortrait3D` with 5 poses in `public/images/portrait/` (center, left, right, up, down)
-- [x] `usePortraitLook` updated to return `sx` and `sy` with smooth pointer tracking and touch sway
-- [x] Removed grain, vignette, and radial-gradient ring from hero (no dotted oval)
-- [x] Period after "stories." styled in accent serif italic (`stories.`)
-- [x] Head overlaps bottom third of "stories." with no gap, bleeding off bottom of hero with shirt fading out
-- [x] Header: no bottom border line, transparent at top, hide on scroll down / show on scroll up
-
 ## Phase 5 — Work page
 **Prompt:** *"Do Phase 5. Follow pages/work.md. Mockups: work-grid.png and work-list.png (desktop, annotated, mobile)."*
 - [x] Title, `FilterBar` (sliding pill), `ViewToggle` (GRID / LIST, remembered in `localStorage` in try/catch)

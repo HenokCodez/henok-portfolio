@@ -4,7 +4,7 @@ import { Reveal } from '../ui/Reveal';
 
 export function Experience() {
   return (
-    <section className="pb-section pt-0 bg-bg border-t border-line">
+    <section className="py-section pt-10 md:pt-16 bg-bg border-t border-line">
       <div className="container-x">
         <Reveal>
           <SectionHeading

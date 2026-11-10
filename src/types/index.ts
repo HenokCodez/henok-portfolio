@@ -72,7 +72,6 @@ export interface SiteConfig {
   showreel: {
     youtubeId: string;
     duration: string;
-    posterUrl?: string;
   };
   tools: string[];
   services: {
@@ -93,6 +92,9 @@ export interface SiteConfig {
     quote: string;
     name: string;
     role: string;
+    rating?: number;
+    tag?: string;
+    screenshotUrl?: string;
   }[];
   projectTypes: string[];
   budgets: string[];

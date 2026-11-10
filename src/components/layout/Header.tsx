@@ -25,12 +25,12 @@ export function Header() {
 
     function handleScroll() {
       const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 20);
+      setIsScrolled(currentScrollY > 40);
 
-      if (currentScrollY > 60) {
-        if (currentScrollY > lastScrollY + 4 && isVisible) {
+      if (currentScrollY > 200) {
+        if (currentScrollY > lastScrollY && isVisible) {
           setIsVisible(false); // scrolling down
-        } else if (currentScrollY < lastScrollY - 4 && !isVisible) {
+        } else if (currentScrollY < lastScrollY && !isVisible) {
           setIsVisible(true); // scrolling up
         }
       } else {
@@ -48,9 +48,11 @@ export function Header() {
     <>
       <header
         className={cn(
-          'fixed top-0 inset-x-0 z-30 transition-all duration-300 ease-out border-b-0 border-none',
+          'fixed top-0 inset-x-0 z-30 transition-all duration-300 ease-out',
           isVisible ? 'translate-y-0' : '-translate-y-full',
-          isScrolled ? 'bg-bg/70 backdrop-blur-md' : 'bg-transparent',
+          isScrolled
+            ? 'bg-bg/70 backdrop-blur-md border-b border-line'
+            : 'bg-transparent border-b border-transparent',
         )}
         style={{ height: 'var(--header-h)' }}
       >

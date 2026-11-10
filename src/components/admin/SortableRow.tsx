@@ -81,9 +81,9 @@ export function SortableRow({
 
         {/* 3. Title + Meta */}
         <div className="min-w-0 pr-2">
-          <p className="font-display font-semibold text-text truncate">
+          <h4 className="font-display font-semibold text-text truncate">
             {video.title}
-          </p>
+          </h4>
           <p className="font-mono text-xs text-muted truncate mt-0.5">
             {video.client || 'Independent'} · {video.year || 2025}
           </p>
@@ -150,13 +150,7 @@ export function SortableRow({
         onClick={() => onEdit(video)}
         role="button"
         tabIndex={0}
-        aria-label={`Edit ${video.title}`}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onEdit(video);
-          }
-        }}
+        onKeyDown={(e) => e.key === 'Enter' && onEdit(video)}
         className="md:hidden grid grid-cols-[70px_1fr_60px] gap-3 items-center p-3 text-sm cursor-pointer"
       >
         <div className="w-[70px] aspect-video rounded overflow-hidden bg-surface-2 relative shrink-0 border border-line">
@@ -168,9 +162,9 @@ export function SortableRow({
         </div>
 
         <div className="min-w-0">
-          <p className="font-display font-semibold text-text text-sm truncate">
+          <h4 className="font-display font-semibold text-text text-sm truncate">
             {video.title}
-          </p>
+          </h4>
           <p className="font-mono text-[11px] text-muted truncate mt-0.5">
             {video.category} · {video.year}
           </p>
@@ -183,7 +177,6 @@ export function SortableRow({
           <Switch
             checked={video.published}
             onChange={() => onTogglePublished(video)}
-            aria-label={`Toggle publication for ${video.title}`}
           />
         </div>
       </div>

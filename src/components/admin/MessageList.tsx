@@ -86,18 +86,9 @@ export function MessageList({
           return (
             <div
               key={msg.id}
-              role="button"
-              tabIndex={0}
-              aria-label={`View message from ${msg.name}`}
               onClick={() => handleSelect(msg.id)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleSelect(msg.id);
-                }
-              }}
               className={cn(
-                'p-4 cursor-pointer transition-colors select-none text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+                'p-4 cursor-pointer transition-colors select-none text-left',
                 isSelected ? 'bg-surface-2' : 'hover:bg-surface-2/50',
               )}
             >
@@ -105,14 +96,14 @@ export function MessageList({
                 {!msg.read && (
                   <span className="w-2 h-2 rounded-full bg-accent shrink-0" />
                 )}
-                <p
+                <h4
                   className={cn(
                     'font-display font-semibold text-sm truncate',
                     msg.read ? 'text-muted' : 'text-text font-bold',
                   )}
                 >
                   {msg.name}
-                </p>
+                </h4>
               </div>
               <p className="font-mono text-xs text-muted truncate">
                 {msg.project_type} · {formatRelativeTime(msg.created_at)}

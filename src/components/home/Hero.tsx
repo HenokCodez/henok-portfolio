@@ -1,15 +1,55 @@
+import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { siteConfig } from '../../config/site';
-import { HeroPortrait3D } from './HeroPortrait3D';
-import { HeroTimecode } from './HeroTimecode';
+import { HeroPortrait } from './HeroPortrait';
+import { usePortraitLook } from '../../hooks/usePortraitLook';
 
 export function Hero() {
+  const look = usePortraitLook();
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const parallaxY = useTransform(scrollY, [0, 900], [0, -108]);
 
+  // Running timecode at 24fps: 00:00:12:04
+  const [frames, setFrames] = useState(12 * 24 + 4);
+
+  useEffect(() => {
+    let animId: number;
+    let lastTime = performance.now();
+
+    function step(now: number) {
+      if (document.hidden) {
+        lastTime = now;
+        animId = requestAnimationFrame(step);
+        return;
+      }
+      if (now - lastTime >= 1000 / 24) {
+        setFrames((f) => (f + 1) % (24 * 60 * 60));
+        lastTime = now;
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    animId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  const hh = String(Math.floor(frames / (24 * 3600))).padStart(2, '0');
+  const mm = String(Math.floor((frames % (24 * 3600)) / (24 * 60))).padStart(2, '0');
+  const ss = String(Math.floor((frames % (24 * 60)) / 24)).padStart(2, '0');
+  const ff = String(frames % 24).padStart(2, '0');
+  const timecode = `${hh}:${mm}:${ss}:${ff}`;
+
   return (
     <section className="relative w-full h-[900px] overflow-hidden bg-bg select-none">
+      {/* Background Interactive Radial Glow */}
+      <motion.div
+        style={prefersReduced ? undefined : { x: look.glowX, y: look.glowY }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(60%_55%_at_50%_62%,rgba(255,77,31,0.20),transparent_70%)]" />
+      </motion.div>
+
       {/* [3] Intro Line */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -20,9 +60,9 @@ export function Hero() {
         <p className="font-mono text-[11px] uppercase tracking-mono text-muted mb-3.5">
           [ {siteConfig.roleLong} ]
         </p>
-        <p className="font-display font-bold text-2xl sm:text-3xl md:text-[38px] tracking-[-0.03em] text-text">
+        <h2 className="font-display font-bold text-2xl sm:text-3xl md:text-[38px] tracking-[-0.03em] text-text">
           I turn ideas into
-        </p>
+        </h2>
       </motion.div>
 
       {/* [4] Giant Word "stories." with Parallax */}
@@ -38,13 +78,19 @@ export function Hero() {
             className="font-serif italic text-accent"
             style={{ fontSize: 'clamp(120px, 24vw, 360px)' }}
           >
-            stories.
+            stories
+          </span>
+          <span
+            className="font-display font-extrabold text-text"
+            style={{ fontSize: 'clamp(120px, 24vw, 360px)' }}
+          >
+            .
           </span>
         </h1>
       </motion.div>
 
-      {/* [5] 3D Pose-Blend Portrait */}
-      <HeroPortrait3D />
+      {/* [5] Portrait */}
+      <HeroPortrait />
 
       {/* [6] Side Blocks */}
       {/* Left Block */}
@@ -52,7 +98,7 @@ export function Hero() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute left-5 md:left-10 top-[620px] md:top-[520px] z-10 select-none"
+        className="absolute left-5 md:left-10 top-[680px] md:top-[520px] z-10 select-none"
       >
         <span className="block font-serif italic text-[17px] md:text-[26px] text-accent mb-1.5">
           Hello, I&apos;m
@@ -67,7 +113,7 @@ export function Hero() {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute right-5 md:right-10 top-[710px] md:top-[520px] z-10 text-right select-none"
+        className="absolute right-5 md:right-10 top-[680px] md:top-[520px] z-10 text-right select-none"
       >
         <span className="block font-serif italic text-[17px] md:text-[26px] text-accent mb-1.5">
           Based in {siteConfig.location.label}
@@ -118,9 +164,13 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-9 z-10">
         <div className="container-x flex flex-col md:flex-row md:items-end justify-between gap-3 text-muted font-mono text-[11px] tracking-mono uppercase">
           <span className="hidden md:inline-block">↓ Scroll to explore</span>
-          <HeroTimecode />
+          <span className="text-text flex items-center gap-2 self-start md:self-auto">
+            <span>{timecode}</span>
+            <span className="inline-block w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <span>REC</span>
+          </span>
           <span className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-ok shadow-[0_0_8px_currentColor] text-ok" />
+            <span className="inline-block w-2 h-2 rounded-full bg-ok shadow-[0_0_8px_#3DDC97]" />
             <span>Available — Nov 2026</span>
           </span>
         </div>

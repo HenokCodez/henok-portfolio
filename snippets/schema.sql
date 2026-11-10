@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Henok portfolio — Supabase schema. Paste into Supabase → SQL Editor → Run.
--- BEFORE RUNNING: replace YOUR_ADMIN_EMAIL (one place, inside is_admin()).
+-- Admin email is configured for: henokbinayew21@gmail.com
 -- ============================================================================
 
 create extension if not exists "pgcrypto";
@@ -11,7 +11,7 @@ returns boolean
 language sql
 stable
 as $$
-  select coalesce(auth.jwt() ->> 'email', '') = 'YOUR_ADMIN_EMAIL';
+  select coalesce(auth.jwt() ->> 'email', '') = 'henokbinayew21@gmail.com';
 $$;
 
 -- ---------- videos ----------

@@ -71,13 +71,13 @@ export function Timeline() {
         {/* Animated Orange Playhead spanning all tracks */}
         <div className="absolute inset-y-0 left-8 right-0 pointer-events-none overflow-hidden">
           <motion.div
-            animate={!prefersReduced && isInView ? { left: ['0%', '100%'] } : { left: '0%' }}
+            animate={!prefersReduced && isInView ? { x: ['0%', '1000%'] } : { x: '0%' }}
             transition={{
               repeat: Infinity,
               duration: 8,
               ease: 'linear',
             }}
-            className="absolute top-0 bottom-0 w-[2px] bg-accent shadow-[0_0_8px_var(--accent)]"
+            className="w-[2px] h-full bg-accent shadow-[0_0_8px_rgba(255,77,31,0.5)]"
           />
         </div>
       </div>

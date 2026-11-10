@@ -11,11 +11,13 @@ import { CTASection } from '../components/home/CTASection';
 const MARQUEE_ITEMS = [
   'Premiere Pro',
   'After Effects',
-  'DaVinci Resolve',
-  'Photoshop',
+  'Remotion',
+  'ElevenLabs',
+  'Claude & Google Flow',
+  'AI Image & Video',
+  'Local AI Tools',
   'Sound Design',
   'Color Grading',
-  'Motion Graphics',
   'Storytelling',
 ];
 

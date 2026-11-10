@@ -44,13 +44,7 @@ export function VideoList({ videos, onSelectVideo }: VideoListProps) {
             }}
             role="button"
             tabIndex={0}
-            aria-label={`View ${video.title}`}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onSelectVideo?.(video.slug);
-              }
-            }}
+            onKeyDown={(e) => e.key === 'Enter' && onSelectVideo?.(video.slug)}
             className="group relative block py-5 sm:py-[26px] cursor-pointer transition-all duration-300 ease-out hover:bg-gradient-to-r hover:from-accent-soft hover:to-transparent"
           >
             {/* Desktop Full Columns / Mobile Compact Layout */}

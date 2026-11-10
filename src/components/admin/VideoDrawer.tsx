@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { parseYouTubeId, slugify, embedUrl, thumbnailUrl } from '../../lib/youtube';
 import { Switch } from '../ui/Switch';
@@ -21,44 +21,6 @@ export function VideoDrawer({
   onSave,
   onDelete,
 }: VideoDrawerProps) {
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  // ESC key and focus trap
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const timer = setTimeout(() => {
-      closeButtonRef.current?.focus();
-    }, 50);
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'Tab' && drawerRef.current) {
-        const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        );
-        if (!focusable.length) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
   const [youtubeInput, setYoutubeInput] = useState('');
   const [youtubeId, setYoutubeId] = useState<string | null>(null);
   const [isPlayingPreview, setIsPlayingPreview] = useState(false);
@@ -112,7 +74,7 @@ export function VideoDrawer({
       setYear(new Date().getFullYear());
       setClient('');
       setRole('');
-      setTools(['Premiere Pro', 'DaVinci Resolve']);
+      setTools(['Premiere Pro', 'After Effects']);
       setDescription('');
       setThumbnailUrlInput('');
       setPublished(true);
@@ -227,10 +189,6 @@ export function VideoDrawer({
           {/* Right Sliding Drawer */}
           <motion.div
             key="drawer-panel"
-            ref={drawerRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="drawer-title"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -239,11 +197,10 @@ export function VideoDrawer({
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-line">
-              <h2 id="drawer-title" className="font-display font-extrabold uppercase text-xl sm:text-2xl tracking-tight text-text">
+              <h2 className="font-display font-extrabold uppercase text-xl sm:text-2xl tracking-tight text-text">
                 {video ? 'EDIT VIDEO' : 'ADD VIDEO'}
               </h2>
               <button
-                ref={closeButtonRef}
                 type="button"
                 onClick={onClose}
                 aria-label="Close drawer"
@@ -493,7 +450,7 @@ export function VideoDrawer({
                       Visible on public Work page
                     </span>
                   </div>
-                  <Switch checked={published} onChange={setPublished} aria-label="Publish video" />
+                  <Switch checked={published} onChange={setPublished} />
                 </div>
 
                 <div className="p-4 rounded-xl bg-surface-2 border border-line flex items-center justify-between">
@@ -505,7 +462,7 @@ export function VideoDrawer({
                       Show in Selected Work on Home (max 5)
                     </span>
                   </div>
-                  <Switch checked={featured} onChange={setFeatured} aria-label="Feature video" />
+                  <Switch checked={featured} onChange={setFeatured} />
                 </div>
               </div>
 

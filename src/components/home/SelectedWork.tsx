@@ -21,7 +21,6 @@ export function SelectedWork() {
 
   const firstCard = videos[0];
   const gridCards = videos.slice(1, 5);
-  const totalStr = String(videos.length).padStart(2, '0');
 
   return (
     <section className="py-section pt-20 pb-28 md:pb-32 bg-bg border-t border-line">
@@ -51,7 +50,7 @@ export function SelectedWork() {
                 <div className="mb-6">
                   <VideoCard
                     video={firstCard}
-                    indexStr={`01 / ${totalStr}`}
+                    indexStr="01 / 09"
                     eager={true}
                     aspectClassName="aspect-[16/10] min-[701px]:aspect-[21/9] min-[701px]:max-h-[min(520px,68vh)]"
                     className="w-full"
@@ -69,7 +68,7 @@ export function SelectedWork() {
                     <Reveal key={video.id} delay={idx * 0.1}>
                       <VideoCard
                         video={video}
-                        indexStr={`${num} / ${totalStr}`}
+                        indexStr={`${num} / 09`}
                       />
                     </Reveal>
                   );

@@ -3,7 +3,7 @@
   "name": "Henok",
   "role": "Video Editor",
   "roleLong": "Video Editor & Visual Storyteller",
-  "email": "hello@henok.studio",
+  "email": "henokbinayew21@gmail.com",
   "bookingUrl": "",
   "cvUrl": "",
   "location": {
@@ -26,12 +26,12 @@
   "tools": [
     "Premiere Pro",
     "After Effects",
-    "DaVinci Resolve",
+    "Remotion",
     "Photoshop",
-    "Audition",
-    "Figma",
-    "CapCut",
-    "Blender"
+    "ElevenLabs",
+    "Claude & Google Flow",
+    "AI Image & Video",
+    "Local AI Tools"
   ],
   "services": [
     {
@@ -53,19 +53,19 @@
   ],
   "stats": [
     {
+      "value": 500,
+      "suffix": "+",
+      "label": "Videos edited"
+    },
+    {
+      "value": 12,
+      "suffix": "+",
+      "label": "Clients"
+    },
+    {
       "value": 5,
-      "suffix": "+",
-      "label": "Years editing"
-    },
-    {
-      "value": 120,
-      "suffix": "+",
-      "label": "Projects delivered"
-    },
-    {
-      "value": 40,
-      "suffix": "+",
-      "label": "Happy clients"
+      "suffix": "",
+      "label": "International clients"
     }
   ],
   "experience": [
@@ -87,9 +87,28 @@
   ],
   "testimonials": [
     {
-      "quote": "Henok took raw footage and gave it a pulse. Turnaround was fast and the edit felt effortless.",
-      "name": "Client Name",
-      "role": "Role, Company"
+      "quote": "Henok edited a YouTube video for me and did great work. Communication was easy, he delivered on time, and he handled my revision requests without any friction.",
+      "name": "YouTube Channel Owner",
+      "role": "Long-Term Client · Upwork",
+      "rating": 5,
+      "tag": "100% Job Success",
+      "screenshotUrl": "/images/upwork-youtube-review.png"
+    },
+    {
+      "quote": "Henok delivered exceptional quality on this project. He handled the research, scriptwriting, and full video production with professionalism and creativity. The final documentary was original, engaging, and delivered exactly as promised.",
+      "name": "Documentary Producer",
+      "role": "True Crime Documentary · Upwork",
+      "rating": 5,
+      "tag": "100% Job Success",
+      "screenshotUrl": "/images/upwork-crime-review.png"
+    },
+    {
+      "quote": "100% Job Success on Upwork with a perfect 5.0 track record. Fast turnaround, proactive communication, and high-retention cinematic storytelling across educational and documentary channels.",
+      "name": "Upwork Verified Client",
+      "role": "Top Rated · 100% Job Success",
+      "rating": 5,
+      "tag": "Upwork Top Rated",
+      "screenshotUrl": "/images/upwork-profile-proof.png"
     }
   ],
   "projectTypes": [

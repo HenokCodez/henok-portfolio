@@ -84,7 +84,6 @@ export default function Settings() {
               </div>
               <Switch
                 checked={settings.available}
-                aria-label="Toggle availability for projects"
                 onChange={(checked) =>
                   setSettings({ ...settings, available: checked })
                 }
@@ -118,7 +117,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setSettings({ ...settings, email: e.target.value })
                 }
-                placeholder="hello@henok.studio"
+                placeholder="henokbinayew21@gmail.com"
                 className="w-full h-12 px-4 rounded-xl bg-surface-2 border border-line-strong text-sm text-text placeholder:text-faint focus:outline-none focus:border-accent"
               />
             </div>

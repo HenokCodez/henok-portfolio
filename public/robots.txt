@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Sitemap: https://henok.studio/sitemap.xml
+Sitemap: https://YOUR-DOMAIN/sitemap.xml

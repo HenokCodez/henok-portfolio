@@ -54,41 +54,10 @@ export default function About() {
                       className="w-full h-full object-cover object-bottom"
                     />
                   ) : (
-                    <div className="relative w-full h-full flex items-end justify-center overflow-hidden">
-                      {/* Cartoon body */}
-                      <div className="absolute bottom-0 w-[72%] h-[48%] rounded-t-[140px] bg-gradient-to-b from-[#1a1a1f] to-[#0e0e12]">
-                        <div className="absolute top-[16px] left-1/2 -translate-x-1/2 w-[80px] h-[24px] rounded-b-[40px] border-b-[2.5px] border-[#2a2a30]" />
-                        <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-[48px] h-[20px] rounded-b-[30px] border-b-[1px] border-[#8c8a85]/30" />
+                    <div className="relative w-full h-full flex items-end justify-center">
+                      <div className="w-[72%] h-[78%] rounded-t-[140px] bg-[#242429] flex flex-col items-center">
+                        <div className="w-36 h-40 mt-10 rounded-[45%] bg-[#8c573f]" />
                       </div>
-                      {/* Head */}
-                      <div className="absolute bottom-[40%] left-1/2 -translate-x-1/2 w-[42%] aspect-[5/6] rounded-[46%_46%_44%_44%/40%_40%_56%_56%] bg-gradient-to-br from-[#b07a5a] via-[#96644a] to-[#7a4e38]" />
-                      {/* Curly hair */}
-                      <div className="absolute bottom-[60%] left-1/2 -translate-x-1/2 w-[40%] h-[14%] rounded-t-[80px] rounded-b-[8px] bg-[#1a1410]" />
-                      <div className="absolute bottom-[63%] left-1/2 -translate-x-1/2 flex gap-[2px]">
-                        <div className="w-4 h-4 rounded-full bg-[#1a1410]" />
-                        <div className="w-5 h-5 rounded-full bg-[#1a1410] -mt-1" />
-                        <div className="w-5 h-5 rounded-full bg-[#1a1410] -mt-1.5" />
-                        <div className="w-5 h-5 rounded-full bg-[#1a1410] -mt-1" />
-                        <div className="w-4 h-4 rounded-full bg-[#1a1410]" />
-                      </div>
-                      {/* Glasses */}
-                      <div className="absolute bottom-[48%] left-[30%] w-[14%] h-[7%] rounded-[6px] border-[2px] border-[#c0b8a8]" />
-                      <div className="absolute bottom-[48%] right-[30%] w-[14%] h-[7%] rounded-[6px] border-[2px] border-[#c0b8a8]" />
-                      <div className="absolute bottom-[50.5%] left-1/2 -translate-x-1/2 w-[8%] h-[2px] bg-[#c0b8a8]" />
-                      {/* Eyes */}
-                      <div className="absolute bottom-[49%] left-[34%] w-3 h-2.5 rounded-full bg-white">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#1a0f08] mt-[3px] ml-[4px]" />
-                      </div>
-                      <div className="absolute bottom-[49%] right-[34%] w-3 h-2.5 rounded-full bg-white">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#1a0f08] mt-[3px] ml-[4px]" />
-                      </div>
-                      {/* Goatee */}
-                      <div className="absolute bottom-[40%] left-1/2 -translate-x-1/2 w-[10%] h-[6%] rounded-b-[12px] bg-[#1a1410]/50" />
-                      {/* Headphones headband */}
-                      <div className="absolute bottom-[58%] left-1/2 -translate-x-1/2 w-[52%] h-[16%] rounded-t-[100px] border-t-[4px] border-l-[4px] border-r-[4px] border-[#2a2a30] bg-transparent" />
-                      {/* Headphone cups */}
-                      <div className="absolute bottom-[46%] left-[22%] w-[7%] h-[10%] rounded-[8px] bg-[#2a2a30] border border-[#3a3a40]" />
-                      <div className="absolute bottom-[46%] right-[22%] w-[7%] h-[10%] rounded-[8px] bg-[#2a2a30] border border-[#3a3a40]" />
                     </div>
                   )}
                 </div>
