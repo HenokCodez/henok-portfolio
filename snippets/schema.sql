@@ -54,10 +54,13 @@ create table if not exists public.site_settings (
   email               text,
   showreel_youtube_id text check (showreel_youtube_id is null or showreel_youtube_id ~ '^[A-Za-z0-9_-]{11}$'),
   showreel_duration   text,
+  showreel_poster_url text,
   booking_url         text,
   socials             jsonb not null default '{}'::jsonb
 );
-insert into public.site_settings (id) values (1) on conflict (id) do nothing;
+insert into public.site_settings (id, available, availability_text, email, showreel_youtube_id, showreel_duration)
+values (1, true, 'Available for projects', 'henokbinayew21@gmail.com', 'aqz-KE-bpKQ', '01:48')
+on conflict (id) do nothing;
 
 -- ---------- Row Level Security ----------
 alter table public.videos        enable row level security;
