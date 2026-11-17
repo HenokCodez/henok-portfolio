@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { parseYouTubeId, slugify, embedUrl, thumbnailUrl } from '../../lib/youtube';
+import { parseYouTubeId, slugify, embedUrl } from '../../lib/youtube';
 import { Switch } from '../ui/Switch';
 import { Button } from '../ui/Button';
+import { Thumbnail } from '../video/Thumbnail';
 import type { Video, Category } from '../../types';
-import { X, Play } from 'lucide-react';
+import { X, Play, Sparkles, Loader2, Check } from 'lucide-react';
 
 export interface VideoDrawerProps {
   isOpen: boolean;
@@ -13,6 +14,29 @@ export interface VideoDrawerProps {
   onSave: (data: Omit<Video, 'id' | 'created_at'>, id?: string) => Promise<void>;
   onDelete?: (id: string) => Promise<void>;
 }
+
+const DESCRIPTION_PRESETS = [
+  {
+    label: 'Talking Head & Retention',
+    text: 'Paced and engaging talking-head edit optimized for high retention, crisp punch-ins, audio sweetening, motion graphics, and clean rhythm.',
+  },
+  {
+    label: 'Storytelling & Narrative',
+    text: 'Narrative structure and sound design cut for emotional resonance, intentional pacing, and keeping viewers hooked until the final second.',
+  },
+  {
+    label: 'Cinematic Documentary',
+    text: 'Immersive documentary cut weaving archival footage, multi-track audio soundscapes, and tailored color grading to amplify the story.',
+  },
+  {
+    label: 'Short-Form Viral Hook',
+    text: 'High-impact vertical edit with snappy 3-second visual hooks, kinetic captions, sound design, and pacing tuned for algorithmic retention.',
+  },
+  {
+    label: 'Commercial & Brand Promo',
+    text: 'Tight, brand-aligned commercial cut with modern motion aesthetics, punchy transitions, and high-conversion visual polish.',
+  },
+];
 
 export function VideoDrawer({
   isOpen,
@@ -46,6 +70,10 @@ export function VideoDrawer({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Auto-suggestion state
+  const [isFetchingMeta, setIsFetchingMeta] = useState(false);
+  const [autoSuggestedNotice, setAutoSuggestedNotice] = useState<string | null>(null);
 
   // Populate or reset form
   useEffect(() => {
@@ -82,14 +110,84 @@ export function VideoDrawer({
     }
     setIsPlayingPreview(false);
     setErrorMsg(null);
+    setAutoSuggestedNotice(null);
   }, [video, isOpen]);
 
-  // Handle YouTube parsing
+  // Handle YouTube parsing & auto-suggestion
+  async function handleAutoSuggest(targetId: string, rawInput: string) {
+    if (!targetId) return;
+
+    setIsFetchingMeta(true);
+    setAutoSuggestedNotice(null);
+    try {
+      const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${targetId}`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (data && data.title) {
+        // Auto-fill title if empty or default
+        if (!title || title.startsWith('Talking Head') || title.startsWith('Sample') || !video) {
+          setTitle(data.title);
+          if (!isSlugManual) {
+            setSlug(slugify(data.title));
+          }
+        }
+
+        // Auto-fill client if author_name exists
+        if (data.author_name && (!client || client === 'Creator' || !video)) {
+          setClient(data.author_name);
+        }
+
+        // Auto-detect category
+        const titleLower = (data.title || '').toLowerCase();
+        const urlLower = rawInput.toLowerCase();
+        let detectedCategory: Category = 'YouTube';
+
+        if (urlLower.includes('/shorts/') || titleLower.includes('#shorts') || titleLower.includes('reel') || titleLower.includes('tiktok')) {
+          detectedCategory = 'Shorts';
+        } else if (titleLower.includes('documentary') || titleLower.includes('crime') || titleLower.includes('investigation') || titleLower.includes('story') || titleLower.includes('film')) {
+          detectedCategory = 'Documentary';
+        } else if (titleLower.includes('commercial') || titleLower.includes('promo') || titleLower.includes('ad ') || titleLower.includes('trailer')) {
+          detectedCategory = 'Commercials';
+        } else {
+          detectedCategory = 'YouTube';
+        }
+        setCategory(detectedCategory);
+
+        // Auto-suggest description if currently empty
+        if (!description) {
+          if (detectedCategory === 'Shorts') {
+            setDescription(DESCRIPTION_PRESETS[3].text);
+          } else if (detectedCategory === 'Documentary') {
+            setDescription(DESCRIPTION_PRESETS[2].text);
+          } else if (detectedCategory === 'Commercials') {
+            setDescription(DESCRIPTION_PRESETS[4].text);
+          } else if (titleLower.includes('talking head') || titleLower.includes('podcast')) {
+            setDescription(DESCRIPTION_PRESETS[0].text);
+          } else {
+            setDescription(DESCRIPTION_PRESETS[1].text);
+          }
+        }
+
+        setAutoSuggestedNotice('Auto-suggested title, author, category & description!');
+        setTimeout(() => setAutoSuggestedNotice(null), 4500);
+      }
+    } catch {
+      // ignore network errors gracefully
+    } finally {
+      setIsFetchingMeta(false);
+    }
+  }
+
   function handleYoutubeChange(val: string) {
     setYoutubeInput(val);
     const parsed = parseYouTubeId(val);
     setYoutubeId(parsed);
     setIsPlayingPreview(false);
+
+    if (parsed && parsed !== youtubeId) {
+      handleAutoSuggest(parsed, val);
+    }
   }
 
   // Handle Title & Auto Slug
@@ -220,9 +318,26 @@ export function VideoDrawer({
               <div className="space-y-5">
                 {/* [3] YouTube URL / ID */}
                 <div className="space-y-1.5">
-                  <label className="block font-mono text-[11px] uppercase tracking-mono text-muted">
-                    YouTube URL or ID *
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block font-mono text-[11px] uppercase tracking-mono text-muted">
+                      YouTube URL or ID *
+                    </label>
+                    {youtubeId && (
+                      <button
+                        type="button"
+                        disabled={isFetchingMeta}
+                        onClick={() => handleAutoSuggest(youtubeId, youtubeInput)}
+                        className="inline-flex items-center gap-1.5 font-mono text-xs text-accent hover:text-accent-hover transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        {isFetchingMeta ? (
+                          <Loader2 size={12} className="animate-spin text-accent" />
+                        ) : (
+                          <Sparkles size={12} className="text-accent" />
+                        )}
+                        <span>Auto-suggest details</span>
+                      </button>
+                    )}
+                  </div>
                   <input
                     type="text"
                     required
@@ -235,6 +350,12 @@ export function VideoDrawer({
                     <p className="text-xs font-mono text-danger">
                       That doesn&apos;t look like a valid YouTube link or ID.
                     </p>
+                  )}
+                  {autoSuggestedNotice && (
+                    <div className="flex items-center gap-2 p-2.5 rounded-lg bg-ok/10 border border-ok/30 text-ok text-xs font-mono">
+                      <Check size={14} />
+                      <span>{autoSuggestedNotice}</span>
+                    </div>
                   )}
                 </div>
 
@@ -257,12 +378,13 @@ export function VideoDrawer({
                           onClick={() => setIsPlayingPreview(true)}
                           className="relative w-full h-full cursor-pointer group"
                         >
-                          <img
-                            src={thumbnailUrl(youtubeId)}
+                          <Thumbnail
+                            youtubeId={youtubeId}
+                            overrideUrl={thumbnailUrlInput}
                             alt="Preview thumbnail"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full"
                           />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors pointer-events-none">
                             <div className="w-12 h-12 rounded-full bg-text text-bg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                               <Play size={18} className="ml-0.5 text-bg fill-bg" />
                             </div>
@@ -408,11 +530,16 @@ export function VideoDrawer({
                   )}
                 </div>
 
-                {/* Description */}
-                <div className="space-y-1.5">
-                  <label className="block font-mono text-[11px] uppercase tracking-mono text-muted">
-                    Description
-                  </label>
+                {/* Description & Smart Suggestions */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block font-mono text-[11px] uppercase tracking-mono text-muted">
+                      Description
+                    </label>
+                    <span className="font-mono text-[10px] text-muted">
+                      {description.length}/1000
+                    </span>
+                  </div>
                   <textarea
                     rows={3}
                     maxLength={1000}
@@ -421,6 +548,25 @@ export function VideoDrawer({
                     placeholder="Short description of the brief, editing process, and result…"
                     className="w-full p-3 rounded-xl bg-surface-2 border border-line-strong text-sm text-text placeholder:text-faint focus:outline-none focus:border-accent resize-y"
                   />
+                  {/* Quick Description Suggestion Chips */}
+                  <div className="space-y-1.5 pt-1">
+                    <span className="block font-mono text-[10px] uppercase tracking-mono text-muted">
+                      Suggested Descriptions (Click to apply):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {DESCRIPTION_PRESETS.map((preset) => (
+                        <button
+                          key={preset.label}
+                          type="button"
+                          onClick={() => setDescription(preset.text)}
+                          className="px-2.5 py-1 rounded-lg bg-surface-2 border border-line hover:border-accent hover:text-accent text-muted font-mono text-[11px] transition-all cursor-pointer"
+                          title={preset.text}
+                        >
+                          + {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Custom Thumbnail URL */}

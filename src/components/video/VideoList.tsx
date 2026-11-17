@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { PointerEvent } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
-import { thumbnailUrl } from '../../lib/youtube';
-import { Grain } from '../ui/Grain';
+import { Thumbnail } from './Thumbnail';
 import type { Video } from '../../types';
 
 export interface VideoListProps {
@@ -88,12 +87,13 @@ export function VideoList({ videos, onSelectVideo }: VideoListProps) {
           transition={{ duration: 0.2 }}
           className="pointer-events-none fixed top-0 left-0 z-50 hidden md:block w-[340px] aspect-video rounded-xl overflow-hidden border border-line-strong shadow-[0_30px_70px_rgba(0,0,0,0.7)] rotate-3 bg-surface"
         >
-          <img
-            src={hoveredVideo.thumbnail_url || thumbnailUrl(hoveredVideo.youtube_id)}
+          <Thumbnail
+            youtubeId={hoveredVideo.youtube_id}
+            overrideUrl={hoveredVideo.thumbnail_url}
             alt={hoveredVideo.title}
-            className="w-full h-full object-cover"
+            aspectClassName="w-full h-full"
+            className="w-full h-full"
           />
-          <Grain />
         </motion.div>
       )}
     </div>

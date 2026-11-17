@@ -6,19 +6,16 @@ import { Timeline } from './Timeline';
 import { Grain } from '../ui/Grain';
 import { Reveal } from '../ui/Reveal';
 import { VideoModal } from '../video/VideoModal';
-import { thumbnailUrl } from '../../lib/youtube';
+import { Thumbnail } from '../video/Thumbnail';
 import type { Video } from '../../types';
 
 export function Showreel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [useFallback, setUseFallback] = useState(false);
   const { settings } = useSettings();
 
   const youtubeId = settings?.showreel_youtube_id || siteConfig.showreel.youtubeId;
   const duration = settings?.showreel_duration || siteConfig.showreel.duration;
   const posterUrl = settings?.showreel_poster_url || (siteConfig.showreel as { posterUrl?: string }).posterUrl;
-
-  const thumbSrc = posterUrl || thumbnailUrl(youtubeId, useFallback ? 'hqdefault' : 'maxresdefault');
 
   const showreelVideo: Video = {
     id: 'showreel',
@@ -60,13 +57,13 @@ export function Showreel() {
             className="group relative block w-full aspect-[16/10] min-[701px]:aspect-[21/9] min-[701px]:max-h-[min(520px,68vh)] rounded-reel overflow-hidden bg-surface-2 border border-line-strong select-none text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent"
           >
             {/* Thumbnail Image */}
-            <img
-              src={thumbSrc}
+            <Thumbnail
+              youtubeId={youtubeId}
+              overrideUrl={posterUrl}
               alt="Showreel 2026"
-              onError={() => {
-                if (!useFallback) setUseFallback(true);
-              }}
-              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+              eager
+              aspectClassName="h-full w-full"
+              className="h-full w-full rounded-none"
             />
 
             {/* Dark Overlay */}

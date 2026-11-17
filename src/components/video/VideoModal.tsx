@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { embedUrl, thumbnailUrl } from '../../lib/youtube';
+import { embedUrl } from '../../lib/youtube';
 import { Chip } from '../ui/Chip';
-import { Grain } from '../ui/Grain';
+import { Thumbnail } from './Thumbnail';
 import type { Video } from '../../types';
 
 export interface VideoModalProps {
@@ -23,7 +23,6 @@ export function VideoModal({
   const isShowreel = video?.id === 'showreel' || video?.slug === 'showreel';
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [thumbFallback, setThumbFallback] = useState(false);
 
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -32,7 +31,6 @@ export function VideoModal({
   // Reset player when video slug changes
   useEffect(() => {
     setIsPlaying(false);
-    setThumbFallback(false);
   }, [activeSlug]);
 
   const go = (delta: number) => {
@@ -110,74 +108,79 @@ export function VideoModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-[rgba(5,5,6,0.82)] backdrop-blur-[18px]"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[60] bg-[rgba(5,5,6,0.85)] backdrop-blur-[18px]"
           />
 
-          {/* [2] Centered Modal Panel */}
-          <motion.div
-            key="panel"
-            ref={panelRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-video-title"
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed left-1/2 top-[60px] md:top-[60px] -translate-x-1/2 z-[70] w-[calc(100%-24px)] md:w-[min(1180px,calc(100%-80px))] max-h-[calc(100vh-80px)] overflow-y-auto no-scrollbar pb-12"
+          {/* Centering Viewport Container - Fixed on all devices */}
+          <div
+            className="fixed inset-0 z-[70] overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 md:p-10 pt-10 sm:pt-14 md:pt-16 flex items-start justify-center"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) onClose();
+            }}
           >
-            {/* [3] Close Bar */}
-            <div className="mb-3 flex items-center justify-end gap-3 select-none">
-              <span className="font-mono text-[11px] uppercase tracking-mono text-muted hidden md:inline">
-                ESC to close
-              </span>
-              <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={onClose}
-                aria-label="Close video"
-                className="h-9 px-4 rounded-full border border-line-strong text-[13px] font-semibold text-text hover:bg-surface-2 hover:border-line-strong transition-colors"
-              >
-                Close ✕
-              </button>
-            </div>
-
-            {/* [4] YouTube Player Container */}
-            <div className="relative aspect-video w-full rounded-player overflow-hidden border border-line-strong bg-surface select-none">
-              {isPlaying ? (
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={embedUrl(video.youtube_id)}
-                  title={video.title}
-                  allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                  allowFullScreen
-                />
-              ) : (
+            {/* [2] Centered Modal Panel */}
+            <motion.div
+              key="panel"
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-video-title"
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.98 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-[1180px] pb-12"
+            >
+              {/* [3] Close Bar */}
+              <div className="mb-3 flex items-center justify-end gap-3 select-none">
+                <span className="font-mono text-[11px] uppercase tracking-mono text-muted hidden md:inline">
+                  ESC to close
+                </span>
                 <button
+                  ref={closeButtonRef}
                   type="button"
-                  onClick={() => setIsPlaying(true)}
-                  aria-label={`Play ${video.title}`}
-                  className="group absolute inset-0 w-full h-full text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent"
+                  onClick={onClose}
+                  aria-label="Close video"
+                  className="h-9 px-4 rounded-full border border-line-strong text-[13px] font-semibold text-text hover:bg-surface-2 hover:border-line-strong transition-colors"
                 >
-                  <img
-                    src={
-                      video.thumbnail_url ||
-                      thumbnailUrl(video.youtube_id, thumbFallback ? 'hqdefault' : 'maxresdefault')
-                    }
-                    alt={video.title}
-                    onError={() => setThumbFallback(true)}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
-                  />
-                  <Grain />
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[76px] h-[76px] rounded-full bg-text flex items-center justify-center shadow-2xl transition-transform duration-300 ease-out group-hover:scale-110">
-                      <span className="w-0 h-0 ml-1 border-t-[11px] border-t-transparent border-b-[11px] border-b-transparent border-l-[18px] border-l-bg" />
-                    </div>
-                  </div>
+                  Close ✕
                 </button>
-              )}
-            </div>
+              </div>
+
+              {/* [4] YouTube Player Container */}
+              <div className="relative aspect-video w-full rounded-player overflow-hidden border border-line-strong bg-surface select-none">
+                {isPlaying ? (
+                  <iframe
+                    className="absolute inset-0 h-full w-full"
+                    src={embedUrl(video.youtube_id)}
+                    title={video.title}
+                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                    allowFullScreen
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsPlaying(true)}
+                    aria-label={`Play ${video.title}`}
+                    className="group absolute inset-0 w-full h-full text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <Thumbnail
+                      youtubeId={video.youtube_id}
+                      overrideUrl={video.thumbnail_url}
+                      alt={video.title}
+                      eager
+                      aspectClassName="h-full w-full"
+                      className="h-full w-full rounded-none"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-[76px] h-[76px] rounded-full bg-text flex items-center justify-center shadow-2xl transition-transform duration-300 ease-out group-hover:scale-110">
+                        <span className="w-0 h-0 ml-1 border-t-[11px] border-t-transparent border-b-[11px] border-b-transparent border-l-[18px] border-l-bg" />
+                      </div>
+                    </div>
+                  </button>
+                )}
+              </div>
 
             {/* [5] Title Row & Prev/Next Controls */}
             <div className="mt-7 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
@@ -285,15 +288,13 @@ export function VideoModal({
                       className="group p-2.5 sm:p-3.5 rounded-[14px] bg-surface border border-line hover:border-line-strong flex items-center gap-3.5 cursor-pointer transition-colors"
                     >
                       <div className="w-[104px] aspect-video rounded-lg overflow-hidden shrink-0 relative bg-surface-2">
-                        <img
-                          src={
-                            other.thumbnail_url ||
-                            thumbnailUrl(other.youtube_id, 'hqdefault')
-                          }
+                        <Thumbnail
+                          youtubeId={other.youtube_id}
+                          overrideUrl={other.thumbnail_url}
                           alt={other.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          aspectClassName="h-full w-full"
+                          className="w-full h-full"
                         />
-                        <Grain />
                       </div>
                       <div className="overflow-hidden">
                         <h4 className="font-display font-semibold text-sm text-text truncate group-hover:text-accent transition-colors">
@@ -309,6 +310,7 @@ export function VideoModal({
               </div>
             )}
           </motion.div>
+        </div>
         </>
       )}
     </AnimatePresence>
