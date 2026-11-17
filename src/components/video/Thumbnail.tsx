@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Film } from 'lucide-react';
 import { Grain } from '../ui/Grain';
 import { cn } from '../../lib/cn';
@@ -17,7 +17,7 @@ export function Thumbnail({
   youtubeId,
   overrideUrl,
   alt,
-  eager = false,
+  eager = true,
   className,
   aspectClassName,
 }: ThumbnailProps) {
@@ -41,8 +41,9 @@ export function Thumbnail({
   const [candidateIdx, setCandidateIdx] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasErrorAll, setHasErrorAll] = useState(candidates.length === 0);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  // Reset when props change
+  // Reset state when props change
   useEffect(() => {
     setCandidateIdx(0);
     setIsLoaded(false);
@@ -51,7 +52,7 @@ export function Thumbnail({
 
   const currentSrc = candidates[candidateIdx];
 
-  const handleError = () => {
+  const advanceCandidate = () => {
     if (candidateIdx + 1 < candidates.length) {
       setCandidateIdx((prev) => prev + 1);
       setIsLoaded(false);
@@ -61,22 +62,32 @@ export function Thumbnail({
     }
   };
 
+  const handleError = () => {
+    advanceCandidate();
+  };
+
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
-    // YouTube returns a 120x90 placeholder when maxres/hq is missing or empty
+    // YouTube returns a 120x90 placeholder when maxres/hq is missing or placeholder
     if (img.naturalWidth > 0 && img.naturalWidth <= 120) {
-      if (candidateIdx + 1 < candidates.length) {
-        setCandidateIdx((prev) => prev + 1);
-        setIsLoaded(false);
-      } else {
-        // Even the last candidate was a 120x90 placeholder
-        setHasErrorAll(true);
-        setIsLoaded(true);
-      }
+      advanceCandidate();
       return;
     }
     setIsLoaded(true);
   };
+
+  // Immediate check for cached images (browser already has them in memory)
+  useEffect(() => {
+    if (!imgRef.current) return;
+    const img = imgRef.current;
+    if (img.complete) {
+      if (img.naturalWidth > 0 && img.naturalWidth <= 120) {
+        advanceCandidate();
+      } else if (img.naturalWidth > 120) {
+        setIsLoaded(true);
+      }
+    }
+  }, [currentSrc]);
 
   return (
     <div
@@ -86,7 +97,7 @@ export function Thumbnail({
         className,
       )}
     >
-      {/* Shimmer skeleton placeholder */}
+      {/* Background Shimmer placeholder while loading */}
       {!isLoaded && !hasErrorAll && (
         <div
           aria-hidden="true"
@@ -96,20 +107,21 @@ export function Thumbnail({
 
       {!hasErrorAll && currentSrc ? (
         <img
+          ref={imgRef}
           key={currentSrc}
           src={currentSrc}
           alt={alt}
-          loading={eager ? 'eager' : 'lazy'}
+          loading={eager ? 'eager' : 'eager'}
           decoding="async"
           onLoad={handleLoad}
           onError={handleError}
           className={cn(
-            'absolute inset-0 h-full w-full object-cover transition-opacity duration-300',
-            isLoaded ? 'opacity-100' : 'opacity-0',
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-200',
+            isLoaded ? 'opacity-100' : 'opacity-90',
           )}
         />
       ) : (
-        /* Cinematic Dark Fallback Poster if no thumbnail is available */
+        /* Cinematic Dark Fallback Poster if no valid thumbnail exists */
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#1c1c22] via-[#121216] to-[#0c0c0e] text-center border border-line">
           <div className="w-12 h-12 rounded-full bg-surface-3 border border-line flex items-center justify-center text-accent mb-3 shadow-[0_0_25px_-5px_rgba(255,77,31,0.3)]">
             <Film className="w-6 h-6" />

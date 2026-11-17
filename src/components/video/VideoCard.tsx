@@ -18,7 +18,7 @@ export interface VideoCardProps {
 export function VideoCard({
   video,
   indexStr,
-  eager = false,
+  eager = true,
   className,
   aspectClassName,
   onClick,
@@ -45,8 +45,8 @@ export function VideoCard({
         overrideUrl={video.thumbnail_url}
         alt={video.title}
         eager={eager}
-        aspectClassName={aspectClassName || 'aspect-video'}
-        className="h-full w-full"
+        aspectClassName="w-full h-full"
+        className="absolute inset-0 w-full h-full"
       />
 
       {/* Top Metadata */}
